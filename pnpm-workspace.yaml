@@ -1,0 +1,13 @@
+allowBuilds:
+  esbuild: true
+  lightningcss: true
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+# The committed lockfile pins these official packages at versions published
+# hours before pnpm's minimum-release-age cutoff; exempt just those names.
+minimumReleaseAgeExclude:
+  - "@rollup/*"
+  - rollup
+  - next
+  - "@next/*"

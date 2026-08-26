@@ -1,0 +1,25 @@
+{
+  "name": "openhiggsfield-ai",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start",
+    "brand": "node scripts/build-brand-assets.mjs"
+  },
+  "dependencies": {
+    "@tanstack/react-virtual": "^3.14.10",
+    "@vercel/blob": "^2.8.0",
+    "next": "^16.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "typescript": "^5.9.2"
+  }
+}
