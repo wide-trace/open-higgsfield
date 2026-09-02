@@ -22,7 +22,7 @@ export const useActive = create<ActiveState>()(
   persist(
     (set) => ({
       surface: "image",
-      model: "nano-banana-2",
+      model: "soul-2",
       batch: 1,
       setModel: (id) => {
         const model = getModel(id);
@@ -47,7 +47,7 @@ export const useActive = create<ActiveState>()(
         try {
           getModel(state.model);
         } catch {
-          state.setModel("nano-banana-2");
+          state.setModel("soul-2");
         }
       },
     },

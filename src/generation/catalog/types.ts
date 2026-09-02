@@ -25,7 +25,7 @@ export type ModelEntry = {
   label: string;
   roles: Partial<Record<MediaRole, number>>;
   settings: Record<string, SettingField>;
-  /** Submit paths when the shared mapper is enough. Banana, Soul and Kling 3 keep custom maps. */
+  /** Submit paths when the shared mapper is enough. Soul and Kling 3 keep custom maps. */
   paths?: PlatformPaths;
 };
 

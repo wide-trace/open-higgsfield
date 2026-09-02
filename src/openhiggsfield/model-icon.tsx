@@ -8,9 +8,7 @@ export function modelIconFile(id: string): string | undefined {
   if (id.startsWith("grok")) return "grok";
   if (id.startsWith("happy-horse")) return "happy-horse";
   if (id.startsWith("minimax")) return "minimax";
-  if (id.startsWith("nano-banana") || id.startsWith("gemini") || id.startsWith("veo")) return "google";
   if (id.startsWith("recraft")) return "recraft";
-  if (id.startsWith("gpt-image")) return "openai";
   if (id.startsWith("soul") || id === "dop") return "higgsfield";
   if (id.startsWith("ideogram")) return "ideogram";
   if (id.startsWith("qwen")) return "qwen";

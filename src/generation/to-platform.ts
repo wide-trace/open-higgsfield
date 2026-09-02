@@ -5,14 +5,8 @@ type Mapped = { path: string; body: Record<string, unknown> };
 type Mapper = (plane: GenerationPlane) => Mapped;
 
 const MAP: Record<string, Mapper> = {
-  "nano-banana-2": (plane) =>
-    mapBanana(plane, "nano-banana-2/text-to-image", "nano-banana-2/image-to-image"),
-  "nano-banana-2-lite": (plane) =>
-    mapBanana(plane, "nano-banana-2/lite/text-to-image", "nano-banana-2/lite/image-to-image"),
-  "nano-banana-pro": (plane) => mapBanana(plane, "nano-banana-pro", "nano-banana-pro/edit"),
   "soul-cinema": (plane) => mapSoul(plane, "higgsfield-ai/soul/cinema"),
   "soul-2": (plane) => mapSoul(plane, "higgsfield-ai/soul/v2/standard"),
-  "gemini-omni-flash": mapGemini,
   "kling-3-turbo": mapKlingTurbo,
   "kling-3-std": (plane) => mapKling3(plane, "kling-video/v3.0/std"),
   "kling-3-pro": (plane) => mapKling3(plane, "kling-video/v3.0/pro"),
@@ -32,22 +26,6 @@ function urls(plane: GenerationPlane, role: "start" | "end" | "reference" | "vid
   return (plane.media[role] ?? []).map((item) => item.url);
 }
 
-function mapBanana(plane: GenerationPlane, textPath: string, editPath: string): Mapped {
-  const refs = urls(plane, "reference");
-  return {
-    path: refs.length ? editPath : textPath,
-    body: {
-      prompt: plane.prompt.text,
-      aspect_ratio: plane.settings.aspectRatio,
-      resolution: plane.settings.resolution,
-      output_format: plane.settings.outputFormat,
-      ...(plane.settings.thinking ? { thinking: plane.settings.thinking } : {}),
-      ...(typeof plane.settings.numImages === "number" ? { num_images: plane.settings.numImages } : {}),
-      ...(refs.length ? { image_urls: refs } : {}),
-    },
-  };
-}
-
 function mapSoul(plane: GenerationPlane, path: string): Mapped {
   return {
     path,
@@ -57,20 +35,6 @@ function mapSoul(plane: GenerationPlane, path: string): Mapped {
       resolution: plane.settings.resolution,
       aspect_ratio: plane.settings.aspectRatio,
       enhance_prompt: plane.settings.enhancePrompt,
-    },
-  };
-}
-
-function mapGemini(plane: GenerationPlane): Mapped {
-  const refs = urls(plane, "reference");
-  return {
-    path: refs.length ? "gemini-omni-flash/image-to-video" : "gemini-omni-flash/text-to-video",
-    body: {
-      prompt: plane.prompt.text,
-      duration: plane.settings.duration,
-      resolution: plane.settings.resolution,
-      aspect_ratio: plane.settings.aspectRatio,
-      ...(refs.length ? { image_urls: refs } : {}),
     },
   };
 }
