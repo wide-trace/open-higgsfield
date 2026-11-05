@@ -76,7 +76,7 @@ export function createPlatformClient(options: PlatformClientOptions) {
     },
     async status(requestId: string): Promise<GenerationStatus> {
       if (!requestId) throw new PlatformError(400, { detail: "Missing request id" });
-      return mapStatus(await send("GET", `/requests/${encodeURIComponent(requestId)}/status`));
+      return normalizeGenerationStatus(await send("GET", `/requests/${encodeURIComponent(requestId)}/status`));
     },
   };
 }
@@ -93,7 +93,7 @@ function mapQueued(payload: unknown): QueuedGeneration {
   };
 }
 
-function mapStatus(payload: unknown): GenerationStatus {
+export function normalizeGenerationStatus(payload: unknown): GenerationStatus {
   const data = asRecord(payload);
   const requestId = stringField(data, "request_id") ?? "";
   const images = Array.isArray(data.images)
