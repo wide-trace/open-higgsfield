@@ -26,6 +26,7 @@ export type GenerationStatus = {
   requestId: string;
   images?: Array<{ url: string }>;
   video?: { url: string };
+  artifacts?: Partial<Record<"zip" | "mov" | "jsx" | "fbx" | "ply", { url: string }>>;
   error?: unknown;
 };
 
@@ -102,12 +103,19 @@ function mapStatus(payload: unknown): GenerationStatus {
       })
     : undefined;
   const videoUrl = asRecord(data.video).url;
+  const artifacts = Object.fromEntries(
+    (["zip", "mov", "jsx", "fbx", "ply"] as const).flatMap((key) => {
+      const url = asRecord(data[key]).url;
+      return typeof url === "string" ? [[key, { url }]] : [];
+    }),
+  );
 
   return {
     status: stringField(data, "status") ?? "unknown",
     requestId,
     ...(images?.length ? { images } : {}),
     ...(typeof videoUrl === "string" ? { video: { url: videoUrl } } : {}),
+    ...(Object.keys(artifacts).length ? { artifacts } : {}),
     ...(data.error !== undefined ? { error: data.error } : {}),
   };
 }

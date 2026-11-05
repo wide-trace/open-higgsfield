@@ -32,7 +32,8 @@ Next.js 16 App Router on Vercel · React 19 · plain CSS · Zustand · pnpm
 
 - **One composer for Image and Video.** A single prompt bar drives both; the
   model you pick decides image or video. `⌘/Ctrl + Enter` submits.
-- **38 models in the catalog** — 8 image, 30 video: Soul 2, Soul Cinema, Seedance
+- **39 models in the catalog** — 8 image, 31 video: Genjutsu Light motion transfer,
+  Soul 2, Soul Cinema, Seedance
   2.5 (Edit / Extend), Seedance 2.0 (Fast / Mini), Kling 3 (Turbo / Std / Pro / 4K / Motion), Wan, Flux,
   Ideogram, Recraft, LTX, MiniMax, PixVerse, Grok, Qwen and more. Searchable
   picker.
@@ -42,6 +43,9 @@ Next.js 16 App Router on Vercel · React 19 · plain CSS · Zustand · pnpm
 - **Media inputs by role.** Start frame, end frame, references, video and audio,
   each with the per-role cap the model declares. Files upload to Vercel Blob and
   become public URLs the generate request can carry.
+- **Genjutsu Light.** Transfer a source video's first 15 seconds of motion and
+  audio to one to eight reference images. Choose 480p, 720p, or 1080p; a prompt
+  is optional.
 - **Asset picker.** Attach from your uploads library or from any finished run in
   history — two tabs over one library, filtered to the role's kind.
 - **Batch.** Up to 4 results per press. Models with a native count setting use it;

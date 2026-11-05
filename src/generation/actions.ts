@@ -37,8 +37,23 @@ export async function submitGeneration(plane: GenerationPlane) {
     ...plane,
     settings: parseSettings(model, plane.settings),
   };
+  validateGeneration(model, parsed);
   const { path, body } = toPlatform(parsed);
   return createPlatformClient(await readCredentials()).submit(path, body);
+}
+
+function validateGeneration(model: ReturnType<typeof getModel>, plane: GenerationPlane) {
+  if (model.prompt?.maxLength && plane.prompt.text.length > model.prompt.maxLength) {
+    throw new Error(`Prompt must be ${model.prompt.maxLength.toLocaleString()} characters or fewer`);
+  }
+  if (model.prompt?.required !== false && !plane.prompt.text.trim()) {
+    throw new Error("A prompt is required");
+  }
+  for (const [role, minimum] of Object.entries(model.minRoles ?? {})) {
+    if ((plane.media[role as keyof GenerationPlane["media"]] ?? []).length < minimum) {
+      throw new Error(`Genjutsu Light requires ${minimum} ${role === "reference" ? "reference image" : "source video"}`);
+    }
+  }
 }
 
 /** Every request in flight, answered in one round trip. Next dispatches server

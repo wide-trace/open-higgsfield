@@ -38,12 +38,14 @@ function Option({
   active,
   onSelect,
   ratio,
+  hint,
 }: {
   value: string;
   label: string;
   active: boolean;
   onSelect: () => void;
   ratio?: boolean;
+  hint?: string;
 }) {
   const box = ratio ? ratioBox(value) : null;
   return (
@@ -59,6 +61,7 @@ function Option({
         </span>
       )}
       <span className="ohf-opt-label">{label}</span>
+      {hint && <span className="ohf-opt-hint">{hint}</span>}
       {active && (
         <span className="ohf-opt-check" aria-hidden>
           <CheckIcon size={12} />
@@ -77,7 +80,7 @@ export function OptionList({
   onChange,
   ratio,
 }: {
-  options: readonly { value: string; label: string }[];
+  options: readonly { value: string; label: string; hint?: string }[];
   value: string;
   onChange: (next: string) => void;
   ratio?: boolean;
@@ -103,6 +106,7 @@ export function OptionList({
           key={option.value}
           value={option.value}
           label={option.label}
+          hint={option.hint}
           active={option.value === value}
           ratio={ratio}
           onSelect={() => onChange(option.value)}

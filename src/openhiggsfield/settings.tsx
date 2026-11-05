@@ -131,6 +131,7 @@ export function SettingPopover({
             options={field.values.map((option) => ({
               value: option,
               label: settingValueLabel(settingKey, option),
+              hint: field.hints?.[option],
             }))}
             value={value}
             ratio={settingKey === "aspectRatio"}

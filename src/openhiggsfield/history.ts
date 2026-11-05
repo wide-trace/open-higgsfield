@@ -15,6 +15,8 @@ export interface RunRecord {
   badge?: string;
   kind: "image" | "video";
   urls: string[];
+  /** Optional supplementary files returned by models such as Genjutsu Light. */
+  artifacts?: Partial<Record<"zip" | "mov" | "jsx" | "fbx" | "ply", { url: string }>>;
   status: RunStatus;
   /** Platform request this row is waiting on. Set while status is running so a
       refresh can resume the poll; completed rows keep it for the same id. */
@@ -144,6 +146,8 @@ function isRunRecord(value: unknown): value is RunRecord {
     typeof record.prompt === "string" &&
     typeof record.ratio === "string" &&
     Array.isArray(record.urls) &&
+    (record.artifacts === undefined ||
+      (typeof record.artifacts === "object" && record.artifacts !== null)) &&
     (record.status === "completed" ||
       record.status === "failed" ||
       (record.status === "running" && typeof record.requestId === "string")) &&

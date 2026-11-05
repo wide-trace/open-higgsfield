@@ -19,6 +19,7 @@ const MAP: Record<string, Mapper> = {
   "seedance-2.5": (plane) => mapSeedance(plane, "bytedance/seedance-2.5"),
   "seedance-2.5-edit": (plane) => mapSeedanceSource(plane, "bytedance/seedance-2.5/video-edit", false),
   "seedance-2.5-extend": (plane) => mapSeedanceSource(plane, "bytedance/seedance-2.5/video-extend", true),
+  "genjutsu-light": mapGenjutsuLight,
 };
 
 export function toPlatform(plane: GenerationPlane): Mapped {
@@ -26,6 +27,24 @@ export function toPlatform(plane: GenerationPlane): Mapped {
   const map = MAP[model.id] ?? (model.paths ? (next) => mapByPaths(next, model.paths!) : undefined);
   if (!map) throw new Error(`No platform map for ${plane.model}`);
   return map(plane);
+}
+
+function mapGenjutsuLight(plane: GenerationPlane): Mapped {
+  const video = urls(plane, "video");
+  const images = urls(plane, "reference");
+  if (video.length !== 1) throw new Error("Genjutsu Light requires one source video");
+  if (images.length < 1 || images.length > 8) {
+    throw new Error("Genjutsu Light requires between 1 and 8 reference images");
+  }
+  return {
+    path: "higgsfield/genjutsu-light/motion-transfer/v1.0",
+    body: {
+      prompt: plane.prompt.text.trim(),
+      video_url: video[0],
+      image_urls: images,
+      resolution: plane.settings.resolution,
+    },
+  };
 }
 
 function urls(plane: GenerationPlane, role: "start" | "end" | "reference" | "video" | "audio") {

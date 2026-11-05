@@ -2281,6 +2281,11 @@
   flex: 1;
   min-width: 0;
 }
+.ohf-opt-hint { color: var(--tx3); font-size: 11px; }
+.ohf-input-hint { margin: 8px 12px -2px; color: var(--tx3); font-size: 12px; }
+.ohf-viewer-artifacts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.ohf-viewer-artifact { display: inline-flex; align-items: center; gap: 5px; color: var(--tx2); font-size: 12px; text-decoration: none; }
+.ohf-viewer-artifact:hover { color: var(--accent); }
 .ohf-opt-check {
   display: flex;
   flex-shrink: 0;
