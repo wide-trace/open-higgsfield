@@ -15,7 +15,7 @@ const image = (id: number): MediaItem => ({
 
 function plane(overrides: Partial<GenerationPlane> = {}): GenerationPlane {
   return {
-    model: "genjutsu-light",
+    model: "genjutsu-light-motion-transfer",
     prompt: { text: "Keep the dance energetic" },
     media: { video: [video], reference: [image(1)] },
     settings: { resolution: "720p" },
@@ -23,8 +23,8 @@ function plane(overrides: Partial<GenerationPlane> = {}): GenerationPlane {
   };
 }
 
-describe("Genjutsu Light", () => {
-  const model = getModel("genjutsu-light");
+describe("Genjutsu Light Motion Transfer", () => {
+  const model = getModel("genjutsu-light-motion-transfer");
 
   it("declares the documented input limits and 720p default", () => {
     expect(model.roles).toEqual({ video: 1, reference: 8 });

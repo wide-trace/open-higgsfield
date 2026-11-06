@@ -19,7 +19,7 @@ const MAP: Record<string, Mapper> = {
   "seedance-2.5": (plane) => mapSeedance(plane, "bytedance/seedance-2.5"),
   "seedance-2.5-edit": (plane) => mapSeedanceSource(plane, "bytedance/seedance-2.5/video-edit", false),
   "seedance-2.5-extend": (plane) => mapSeedanceSource(plane, "bytedance/seedance-2.5/video-extend", true),
-  "genjutsu-light": mapGenjutsuLight,
+  "genjutsu-light-motion-transfer": mapGenjutsuLightMotionTransfer,
 };
 
 export function toPlatform(plane: GenerationPlane): Mapped {
@@ -29,7 +29,7 @@ export function toPlatform(plane: GenerationPlane): Mapped {
   return map(plane);
 }
 
-function mapGenjutsuLight(plane: GenerationPlane): Mapped {
+function mapGenjutsuLightMotionTransfer(plane: GenerationPlane): Mapped {
   const video = urls(plane, "video");
   const images = urls(plane, "reference");
   if (video.length !== 1) throw new Error("Genjutsu Light requires one source video");

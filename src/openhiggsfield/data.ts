@@ -219,7 +219,9 @@ function joinPhrases(parts: string[]): string {
     what it makes, what it takes, where its allow-lists top out. The catalog
     stays the only place a model's truth is written down. */
 export function describeModel(model: ModelEntry): string {
-  if (model.id === "genjutsu-light") return "Motion transfer from one source video and 1–8 reference images · to 1080p";
+  if (model.id === "genjutsu-light-motion-transfer") {
+    return "Motion transfer from one source video and 1–8 reference images · to 1080p";
+  }
   const noun = model.surface === "image" ? "Images" : "Video";
   const inputs = [...new Set(rolesOf(model).map((role) => ROLE_PHRASES[role]))];
   const source = inputs.length

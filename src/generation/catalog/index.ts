@@ -1,6 +1,6 @@
 import { dop } from "./dop";
 import { flux2 } from "./flux-2";
-import { genjutsuLight } from "./genjutsu-light";
+import { genjutsuLightMotionTransfer } from "./genjutsu-light-motion-transfer";
 import { flux3 } from "./flux-3";
 import { grokImagine2 } from "./grok-imagine-2";
 import { grokImagineVideo15 } from "./grok-imagine-video-1.5";
@@ -58,7 +58,7 @@ export const MODELS: readonly ModelEntry[] = [
   recraft41,
   qwenImage3,
   zImageTurbo,
-  genjutsuLight,
+  genjutsuLightMotionTransfer,
   wan3,
   wan3Prime,
   wan27,

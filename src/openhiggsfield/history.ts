@@ -15,7 +15,7 @@ export interface RunRecord {
   badge?: string;
   kind: "image" | "video";
   urls: string[];
-  /** Optional supplementary files returned by models such as Genjutsu Light. */
+  /** Optional supplementary files returned by models such as Genjutsu Light Motion Transfer. */
   artifacts?: Partial<Record<"zip" | "mov" | "jsx" | "fbx" | "ply", { url: string }>>;
   status: RunStatus;
   /** Platform request this row is waiting on. Set while status is running so a

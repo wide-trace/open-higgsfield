@@ -1,9 +1,9 @@
 import type { ModelEntry } from "./types";
 
-export const genjutsuLight: ModelEntry = {
-  id: "genjutsu-light",
+export const genjutsuLightMotionTransfer: ModelEntry = {
+  id: "genjutsu-light-motion-transfer",
   surface: "video",
-  label: "Genjutsu Light",
+  label: "Genjutsu Light — Motion Transfer",
   roles: { video: 1, reference: 8 },
   minRoles: { video: 1, reference: 1 },
   prompt: {
