@@ -133,6 +133,10 @@ export function Viewer({
   }
   const aspect = delivered ?? w / h;
   const url = item.urls[0];
+  const artifacts = Object.entries(item.artifacts ?? {}) as Array<[
+    "zip" | "mov" | "jsx" | "fbx" | "ply",
+    { url: string },
+  ]>;
 
   /* Measured on attach as well as on load: the grid has already fetched this
      URL, so the element is usually complete before React can hear its event. */
@@ -373,6 +377,15 @@ export function Viewer({
                 <HeartIcon size={15} filled={item.favorite === true} />
               </button>
             </div>
+            {artifacts.length > 0 && (
+              <div className="ohf-viewer-artifacts" aria-label="Additional files">
+                {artifacts.map(([kind, file]) => (
+                  <a key={kind} className="ohf-viewer-artifact" href={file.url} download target="_blank" rel="noreferrer">
+                    <DownloadIcon size={12} /> Download {kind.toUpperCase()}
+                  </a>
+                ))}
+              </div>
+            )}
           </footer>
         </aside>
       </div>

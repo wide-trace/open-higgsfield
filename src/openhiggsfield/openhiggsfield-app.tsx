@@ -125,6 +125,7 @@ function terminalRows(requestId: string, draft: RunDraft, status: GenerationStat
       badge: draft.badge,
       kind: draft.surface,
       urls: url ? [url] : [],
+      artifacts: status.artifacts,
       status: completed ? "completed" : "failed",
       error: failure,
       art: artFor(draft.surface, hueOf(id), id),
@@ -330,9 +331,11 @@ export function OpenHiggsfieldApp({ fontClassName = "" }: { fontClassName?: stri
       return;
     }
     const plane = assemblePlane();
-    if (!plane.prompt.text.trim()) return;
-
     const entry = getModel(plane.model);
+    const missing = Object.entries(entry.minRoles ?? {}).some(
+      ([role, minimum]) => (plane.media[role as keyof typeof plane.media] ?? []).length < minimum,
+    );
+    if ((entry.prompt?.required !== false && !plane.prompt.text.trim()) || missing) return;
     const ratio = ratioToCss(
       plane.settings.aspectRatio,
       entry.surface === "image" ? "4 / 3" : "16 / 9",

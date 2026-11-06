@@ -15,6 +15,7 @@ import {
 import { createPlatformClient } from "./platform";
 import type { StatusResult } from "./platform";
 import { toPlatform } from "./to-platform";
+import { validateGeneration } from "./validation";
 
 export async function savePlatformCredentials(data: unknown) {
   const { apiKey } = parseCredentialInput(data);
@@ -37,6 +38,7 @@ export async function submitGeneration(plane: GenerationPlane) {
     ...plane,
     settings: parseSettings(model, plane.settings),
   };
+  validateGeneration(model, parsed);
   const { path, body } = toPlatform(parsed);
   return createPlatformClient(await readCredentials()).submit(path, body);
 }

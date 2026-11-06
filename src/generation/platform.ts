@@ -26,6 +26,7 @@ export type GenerationStatus = {
   requestId: string;
   images?: Array<{ url: string }>;
   video?: { url: string };
+  artifacts?: Partial<Record<"zip" | "mov" | "jsx" | "fbx" | "ply", { url: string }>>;
   error?: unknown;
 };
 
@@ -75,7 +76,7 @@ export function createPlatformClient(options: PlatformClientOptions) {
     },
     async status(requestId: string): Promise<GenerationStatus> {
       if (!requestId) throw new PlatformError(400, { detail: "Missing request id" });
-      return mapStatus(await send("GET", `/requests/${encodeURIComponent(requestId)}/status`));
+      return normalizeGenerationStatus(await send("GET", `/requests/${encodeURIComponent(requestId)}/status`));
     },
   };
 }
@@ -92,7 +93,7 @@ function mapQueued(payload: unknown): QueuedGeneration {
   };
 }
 
-function mapStatus(payload: unknown): GenerationStatus {
+export function normalizeGenerationStatus(payload: unknown): GenerationStatus {
   const data = asRecord(payload);
   const requestId = stringField(data, "request_id") ?? "";
   const images = Array.isArray(data.images)
@@ -102,12 +103,19 @@ function mapStatus(payload: unknown): GenerationStatus {
       })
     : undefined;
   const videoUrl = asRecord(data.video).url;
+  const artifacts = Object.fromEntries(
+    (["zip", "mov", "jsx", "fbx", "ply"] as const).flatMap((key) => {
+      const url = asRecord(data[key]).url;
+      return typeof url === "string" ? [[key, { url }]] : [];
+    }),
+  );
 
   return {
     status: stringField(data, "status") ?? "unknown",
     requestId,
     ...(images?.length ? { images } : {}),
     ...(typeof videoUrl === "string" ? { video: { url: videoUrl } } : {}),
+    ...(Object.keys(artifacts).length ? { artifacts } : {}),
     ...(data.error !== undefined ? { error: data.error } : {}),
   };
 }

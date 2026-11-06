@@ -94,7 +94,11 @@ export function Composer({
   const promptRef = useRef<HTMLTextAreaElement>(null);
   /* A run in flight is not a lock: it holds its own tile in the grid, so the
      only thing that can stop a press is having nothing to say. */
-  const disabled = prompt.text.trim().length === 0;
+  const missingRoles = tray.roles.filter(
+    (role) => (model.minRoles?.[role] ?? 0) > tray.items.filter((item) => item.role === role).length,
+  );
+  const promptRequired = model.prompt?.required !== false;
+  const disabled = (promptRequired && prompt.text.trim().length === 0) || missingRoles.length > 0;
 
   /* One batch control, two mechanisms. A model that declares its own
      results-per-request gets that setting written; the rest are submitted once
@@ -211,7 +215,14 @@ export function Composer({
   const attachLabel = tray.allFull ? "Change the inputs" : "Add an input";
   const settingKey = overlay?.startsWith(SETTING) ? overlay.slice(SETTING.length) : null;
   const generateLabel = batchValue > 1 ? `Generate ${batchValue} results` : "Generate";
-  const generateTip = disabled ? "Write a prompt first" : `${generateLabel} · ${shortcut ?? "⌘↵"}`;
+  const missingLabel = missingRoles
+    .map((role) => (role === "reference" ? "at least one reference image" : "a source video"))
+    .join(" and ");
+  const generateTip = disabled
+    ? missingLabel
+      ? `Add ${missingLabel} first`
+      : "Write a prompt first"
+    : `${generateLabel} · ${shortcut ?? "⌘↵"}`;
 
   return (
     <div className="ohf-dock" ref={dockRef} data-selecting={selecting}>
@@ -277,6 +288,9 @@ export function Composer({
         <div className="ohf-swap">
           <div className="ohf-composer">
             <MediaStrip model={model} />
+            {model.roleHints?.video && model.roles.video && (
+              <p className="ohf-input-hint">{model.roleHints.video}</p>
+            )}
 
             {/* The attachment sits beside the words it belongs to, on the same
                 left rail the control row starts from. */}
@@ -313,8 +327,9 @@ export function Composer({
                 className="ohf-prompt"
                 rows={1}
                 value={prompt.text}
-                placeholder={PROMPT_PLACEHOLDERS[surface]}
+                placeholder={model.prompt?.placeholder ?? PROMPT_PLACEHOLDERS[surface]}
                 aria-label="Prompt"
+                maxLength={model.prompt?.maxLength}
                 onPointerDown={() => setOverlay(null)}
                 onFocus={() => setOverlay(null)}
                 onChange={(event) => prompt.setText(event.target.value)}
