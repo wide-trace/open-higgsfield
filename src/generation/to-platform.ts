@@ -7,6 +7,8 @@ type Mapper = (plane: GenerationPlane) => Mapped;
 const MAP: Record<string, Mapper> = {
   "soul-cinema": (plane) => mapSoul(plane, "higgsfield-ai/soul/cinema"),
   "soul-2": (plane) => mapSoul(plane, "higgsfield-ai/soul/v2/standard"),
+  "marketing-studio-flare": (plane) => mapMarketingImage(plane, "marketing-studio/image/flare"),
+  "marketing-studio-sunburst": (plane) => mapMarketingImage(plane, "marketing-studio/image/sunburst"),
   "kling-3-turbo": mapKlingTurbo,
   "kling-3-std": (plane) => mapKling3(plane, "kling-video/v3.0/std"),
   "kling-3-pro": (plane) => mapKling3(plane, "kling-video/v3.0/pro"),
@@ -41,6 +43,24 @@ function mapSoul(plane: GenerationPlane, path: string): Mapped {
       resolution: plane.settings.resolution,
       aspect_ratio: plane.settings.aspectRatio,
       enhance_prompt: plane.settings.enhancePrompt,
+    },
+  };
+}
+
+/* Plain mode only: preset mode needs enhance_prompt with a preset_id and at
+   most two references, so it is sent off explicitly rather than left to the
+   platform default. */
+function mapMarketingImage(plane: GenerationPlane, path: string): Mapped {
+  const refs = urls(plane, "reference");
+  return {
+    path,
+    body: {
+      prompt: plane.prompt.text,
+      aspect_ratio: plane.settings.aspectRatio,
+      resolution: plane.settings.resolution,
+      quality: plane.settings.quality,
+      enhance_prompt: false,
+      ...(refs.length ? { image_urls: refs } : {}),
     },
   };
 }
